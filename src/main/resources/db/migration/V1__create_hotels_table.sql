@@ -1,0 +1,31 @@
+CREATE TABLE hotels
+(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+
+    name VARCHAR(150) NOT NULL,
+
+    email VARCHAR(150),
+
+    phone VARCHAR(50),
+
+    address VARCHAR(500),
+
+    city VARCHAR(100),
+
+    country VARCHAR(100),
+
+    currency VARCHAR(10) NOT NULL DEFAULT 'LKR',
+
+    timezone VARCHAR(100) NOT NULL DEFAULT 'Asia/Colombo',
+
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+
+    UNIQUE KEY uk_hotel_email (email)
+);

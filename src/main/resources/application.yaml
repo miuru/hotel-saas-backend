@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: hotel-saas-backend
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/hotel_saas?useSSL=false&serverTimezone=UTC
+    username: root
+    password: miuru97@7124
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+
+server:
+  port: 8081
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000

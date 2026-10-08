@@ -1,0 +1,27 @@
+CREATE TABLE users
+(
+    id BIGINT NOT NULL AUTO_INCREMENT,
+    hotel_id BIGINT NOT NULL,
+
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+
+    email VARCHAR(150) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+
+    role VARCHAR(50) NOT NULL,
+
+    active BOOLEAN NOT NULL DEFAULT TRUE,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    PRIMARY KEY (id),
+
+    CONSTRAINT uk_users_email UNIQUE (email),
+
+    CONSTRAINT fk_users_hotel
+        FOREIGN KEY (hotel_id)
+        REFERENCES hotels(id)
+);
