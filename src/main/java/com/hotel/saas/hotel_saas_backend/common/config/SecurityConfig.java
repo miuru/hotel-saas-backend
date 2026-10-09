@@ -111,7 +111,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/v1/auth/login"
+                                HttpMethod.POST,
+                                "/api/v1/auth/login",
+                                "/api/v1/onboarding/register"
                         ).permitAll()
 
                         .requestMatchers(
@@ -120,10 +122,14 @@ public class SecurityConfig {
                         ).authenticated()
 
                         .requestMatchers(
+                                "/api/v1/auth/register"
+                        ).denyAll()
+
+                        .requestMatchers(
                                 "/api/v1/hotels",
                                 "/api/v1/hotels/**"
                         ).denyAll()
-
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
 
