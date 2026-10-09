@@ -6,6 +6,7 @@ import com.hotel.saas.hotel_saas_backend.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 
@@ -107,16 +108,25 @@ public class SecurityConfig {
                                 )
                 )
 
-                .authorizeHttpRequests(auth ->
-                        auth
-                                .requestMatchers(
-                                        "/api/v1/auth/**"
-                                )
-                                .permitAll()
 
-                                .anyRequest()
-                                .authenticated()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/api/v1/auth/login"
+                        ).permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/v1/hotels/me"
+                        ).authenticated()
+
+                        .requestMatchers(
+                                "/api/v1/hotels",
+                                "/api/v1/hotels/**"
+                        ).denyAll()
+
+                        .anyRequest().authenticated()
                 )
+
 
                 .authenticationProvider(
                         authenticationProvider()

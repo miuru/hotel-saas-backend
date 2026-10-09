@@ -4,7 +4,11 @@ import com.hotel.saas.hotel_saas_backend.hotel.dto.CreateHotelRequest;
 import com.hotel.saas.hotel_saas_backend.hotel.dto.CreateHotelResponse;
 import com.hotel.saas.hotel_saas_backend.hotel.entity.Hotel;
 import com.hotel.saas.hotel_saas_backend.hotel.repository.HotelRepository;
+import com.hotel.saas.hotel_saas_backend.security.CurrentUserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
@@ -12,9 +16,11 @@ import java.time.LocalDateTime;
 public class HotelService {
 
     private final HotelRepository hotelRepository;
+    private final CurrentUserService currentUserService;
 
-    public HotelService(HotelRepository hotelRepository) {
+    public HotelService(HotelRepository hotelRepository, CurrentUserService currentUserService) {
         this.hotelRepository = hotelRepository;
+        this.currentUserService = currentUserService;
     }
 
     public CreateHotelResponse createHotel(CreateHotelRequest request) {
@@ -75,4 +81,23 @@ public class HotelService {
                 hotel.getUpdatedAt()
         );
     }
+
+
+    @Transactional(readOnly = true)
+    public CreateHotelResponse getCurrentHotel() {
+
+        Long hotelId = currentUserService.getCurrentHotelId();
+
+        Hotel hotel = hotelRepository
+                .findByIdAndActiveTrue(hotelId)
+                .orElseThrow(() ->
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Hotel not found"
+                        )
+                );
+
+        return mapToResponse(hotel);
+    }
+
 }

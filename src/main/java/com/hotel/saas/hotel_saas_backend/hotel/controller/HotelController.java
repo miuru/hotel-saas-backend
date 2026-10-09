@@ -36,4 +36,13 @@ public class HotelController {
                 hotelService.getHotel(id)
         );
     }
+
+    @GetMapping("/me")
+    public ResponseEntity<CreateHotelResponse> getCurrentHotel() {
+
+        return ResponseEntity.ok(
+                hotelService.getCurrentHotel()
+        );
+    }
+
 }

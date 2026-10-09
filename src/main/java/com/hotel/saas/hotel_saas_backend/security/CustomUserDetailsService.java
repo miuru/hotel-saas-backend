@@ -2,6 +2,7 @@ package com.hotel.saas.hotel_saas_backend.security;
 
 import com.hotel.saas.hotel_saas_backend.user.entity.User;
 import com.hotel.saas.hotel_saas_backend.user.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,22 +20,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
 
         User user = userRepository
-                .findByEmail(email.toLowerCase())
+                .findByEmail(email.toLowerCase(java.util.Locale.ROOT))
                 .orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                "User not found"
-                        )
+                        new UsernameNotFoundException("User not found")
                 );
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .authorities("ROLE_" + user.getRole().name())
-                .disabled(!user.getActive())
-                .build();
+        return new HotelUserPrincipal(user);
     }
 }
